@@ -4,20 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.ural.enums.UserRole;
-
-import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPrincipals {
+public class AuthModel {
 
-    private Long id;
+    private String accessToken;
 
-    private String email;
-
-    private Set<UserRole> roles;
+    private String refreshToken;
 
 }

@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
-    private static final String PREFIX_ROLE = "URAL_";
-
     private static final String DEFAULT_ROLE = "URAL_ANY";
 
     private final RoleSecurityService roleSecurityService;
@@ -25,20 +23,11 @@ public class AuthConverter implements Converter<Jwt, Collection<GrantedAuthority
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
         Set<GrantedAuthority> tokenRoles = roleSecurityService.getRoles(jwt.getClaims()).stream()
-                .map(this::mapRole)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
 
         tokenRoles.add(new SimpleGrantedAuthority(DEFAULT_ROLE));
         return tokenRoles;
-    }
-
-    private String mapRole(String role) {
-        if (!role.startsWith(PREFIX_ROLE)) {
-            log.warn("Is not default role for ural: {}", role);
-            return role;
-        }
-        return role.substring(PREFIX_ROLE.length());
     }
 
 }

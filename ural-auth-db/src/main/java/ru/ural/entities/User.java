@@ -19,6 +19,9 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String login;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
