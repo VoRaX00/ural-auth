@@ -1,0 +1,48 @@
+server:
+  port: 10906
+
+spring:
+  application:
+    name: ural-aggregator
+    version: @project.version@
+  datasource:
+    url: jdbc:postgresql://localhost:10900/ural
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        generate_statistics: false
+        show_sql: true
+        check_nullability: true
+        hbm2ddl:
+          auto: validate
+        default_schema: ural_auth
+
+  liquibase:
+    enabled: true
+    liquibase-schema: public
+    database-change-log-table: ural_auth_log
+    database-change-log-lock-table: ural_auth_lock
+    change-log: classpath:db/changelog-master.xml
+    default-schema: ural_auth
+
+security:
+  jwt:
+    public-key: ${PUBLIC_KEY}
+    private-key: ${PRIVATE_KEY}
+
+users:
+  url: http://localhost:10904
+
+logging:
+  level:
+    root: info
+    org:
+      springframework: INFO
+      hibernate: INFO
+      apache:
+        tomcat:
+          util: WARN
