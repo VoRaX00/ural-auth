@@ -126,4 +126,13 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="insert roles" author="kerzhakov">
+        <sql>
+            INSERT INTO roles (code, name) VALUES
+            ('USER', 'Пользователь'),
+            ('ADMIN', 'Администратор'),
+            ('UNDERWRITER', 'Редактор')
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

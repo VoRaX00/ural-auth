@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import ru.ural.enums.UserRole;
-import ural.ru.entities.BaseEntity;
 
 @Getter
 @Setter

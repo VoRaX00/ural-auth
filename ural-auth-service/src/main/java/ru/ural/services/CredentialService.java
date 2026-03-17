@@ -8,8 +8,8 @@ import ru.ural.entities.Credential;
 import ru.ural.entities.User;
 import ru.ural.repositories.CredentialRepository;
 import ru.ural.utils.AuthUtils;
-import ural.ru.exceptions.InternalServerException;
-import ural.ru.exceptions.UnauthorizedException;
+import ru.ural.exceptions.InternalServerException;
+import ru.ural.exceptions.UnauthorizedException;
 
 @Slf4j
 @Service
@@ -40,6 +40,8 @@ public class CredentialService {
                 .hash(hashPassword)
                 .salt(salt)
                 .build();
+
+        credentialRepository.save(credential);
     }
 
 }

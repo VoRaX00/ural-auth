@@ -3,6 +3,7 @@ package ru.ural.services;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ural.entities.Role;
 import ru.ural.entities.User;
 import ru.ural.enums.UserRole;
@@ -11,9 +12,9 @@ import ru.ural.models.UserModel;
 import ru.ural.repositories.RoleRepository;
 import ru.ural.repositories.UserRepository;
 import ru.ural.utils.AuthUtils;
-import ural.ru.exceptions.ConflictException;
-import ural.ru.exceptions.InternalServerException;
-import ural.ru.exceptions.UnauthorizedException;
+import ru.ural.exceptions.ConflictException;
+import ru.ural.exceptions.InternalServerException;
+import ru.ural.exceptions.UnauthorizedException;
 
 import java.util.Set;
 
@@ -46,10 +47,11 @@ public class UserService {
     }
 
     @NonNull
+    @Transactional
     public User createUser(@NonNull UserModel userModel) {
         User user = userMapper.toEntity(userModel);
 
-        Role userRole = roleRepository.findByCode(UserRole.USER.name())
+        Role userRole = roleRepository.findByCode(UserRole.USER)
                 .orElseThrow(() -> new InternalServerException("Not found role: USER"));
 
         user.setRoles(Set.of(userRole));

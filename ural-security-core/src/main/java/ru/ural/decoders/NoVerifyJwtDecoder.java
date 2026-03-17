@@ -3,7 +3,7 @@ package ru.ural.decoders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import ural.ru.exceptions.UnauthorizedException;
+import ru.ural.exceptions.UnauthorizedException;
 
 import java.time.Instant;
 import java.util.Base64;

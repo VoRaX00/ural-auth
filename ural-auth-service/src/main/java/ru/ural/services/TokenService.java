@@ -16,7 +16,7 @@ import ru.ural.models.AuthModel;
 import ru.ural.models.UserPrincipals;
 import ru.ural.properties.AuthProperty;
 import ru.ural.repositories.RefreshTokenRepository;
-import ural.ru.exceptions.UnauthorizedException;
+import ru.ural.exceptions.UnauthorizedException;
 
 import java.time.ZonedDateTime;
 import java.util.*;

@@ -2,7 +2,6 @@ package ru.ural.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ural.ru.entities.BaseEntity;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -5,6 +5,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ural.entities.Credential;
 import ru.ural.entities.User;
 import ru.ural.models.AuthModel;
@@ -30,21 +31,25 @@ public class AuthService {
         return tokenService.issueToken(user);
     }
 
+    @Transactional
     public AuthModel registration(@NonNull UserModel userModel) {
         userService.checkDuplicate(userModel);
         var user = userService.createUser(userModel);
         return tokenService.issueToken(user);
     }
 
+    @Transactional
     public AuthModel refreshTokens(@NonNull String refreshToken) {
         return tokenService.refreshTokens(refreshToken);
     }
 
+    @Transactional
     public void logout(Authentication authentication) {
         Jwt accessToken = JwtUtils.getToken(authentication);
         tokenService.deleteRefreshTokenByAccess(accessToken);
     }
 
+    @Transactional
     public void logoutAll(Authentication authentication) {
         Jwt accessToken = JwtUtils.getToken(authentication);
         tokenService.deleteAllRefreshTokensByAccess(accessToken);
