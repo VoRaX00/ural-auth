@@ -44,6 +44,7 @@ public class AuthConfig {
                 "/actuator/**",
                 "/api/auth/login",
                 "/api/auth/refresh",
+                "/api/auth/registration",
         };
 
         return () -> allowedUrls;
