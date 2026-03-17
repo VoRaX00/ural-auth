@@ -20,6 +20,7 @@ import ru.ural.converters.JwtConverter;
 import ru.ural.filters.ExceptionFilterHandler;
 import ru.ural.decoders.NoVerifyJwtDecoder;
 import ru.ural.properties.JwtProperty;
+import ru.ural.services.JwtVerifier;
 import ru.ural.services.RoleSecurityService;
 
 import java.security.KeyFactory;
@@ -83,6 +84,11 @@ public class AuthConfig {
             HandlerExceptionResolver resolver
     ) {
         return new ExceptionFilterHandler(resolver);
+    }
+
+    @Bean
+    public JwtVerifier jwtVerifier(JwtProperty jwtProperty) {
+        return new JwtVerifier(jwtProperty);
     }
 
     @Bean

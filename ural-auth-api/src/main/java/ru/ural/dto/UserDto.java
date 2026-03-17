@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Dto для регистрации")
-public class RegistrationDto {
+public class UserDto {
 
     private String login;
 

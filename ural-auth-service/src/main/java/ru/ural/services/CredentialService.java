@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import ru.ural.entities.Credential;
+import ru.ural.entities.User;
 import ru.ural.repositories.CredentialRepository;
 import ru.ural.utils.AuthUtils;
 import ural.ru.exceptions.InternalServerException;
@@ -31,6 +32,14 @@ public class CredentialService {
         if (!credential.getHash().equals(hashPassword)) {
             throw new UnauthorizedException("Invalid login or password");
         }
+    }
+
+    public void saveCredentials(User user, String hashPassword, String salt) {
+        Credential credential = Credential.builder()
+                .user(user)
+                .hash(hashPassword)
+                .salt(salt)
+                .build();
     }
 
 }

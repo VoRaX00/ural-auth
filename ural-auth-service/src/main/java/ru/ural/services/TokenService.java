@@ -1,9 +1,12 @@
 package ru.ural.services;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ural.entities.RefreshToken;
 import ru.ural.entities.Role;
 import ru.ural.entities.User;
@@ -12,10 +15,9 @@ import ru.ural.enums.UserRole;
 import ru.ural.models.AuthModel;
 import ru.ural.models.UserPrincipals;
 import ru.ural.properties.AuthProperty;
-import ru.ural.properties.JwtProperty;
 import ru.ural.repositories.RefreshTokenRepository;
+import ural.ru.exceptions.UnauthorizedException;
 
-import java.security.PrivateKey;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,10 +30,36 @@ public class TokenService {
 
     private final AuthProperty authProperty;
 
-    private final JwtProperty jwtProperty;
+    private final JwtVerifier jwtVerifier;
 
-    private final PrivateKey privateKey;
+    @NonNull
+    @Transactional
+    public AuthModel refreshTokens(String refreshToken) {
+        Claims claims = jwtVerifier.verify(refreshToken);
+        String refreshJti = claims.getId();
 
+        RefreshToken oldRefreshToken = refreshTokenRepository.findByRefreshJti(refreshJti)
+                .orElseThrow(() -> new UnauthorizedException("Not found refresh token"));
+
+        User user = oldRefreshToken.getUser();
+
+        refreshTokenRepository.deleteByRefreshJti(refreshJti);
+        return issueToken(user);
+    }
+
+    @Transactional
+    public void deleteRefreshTokenByAccess(Jwt jwt) {
+        String accessJti = jwt.getId();
+        refreshTokenRepository.deleteByAccessJti(accessJti);
+    }
+
+    @Transactional
+    public void deleteAllRefreshTokensByAccess(Jwt jwt) {
+        Long userId = Long.valueOf(jwt.getClaimAsString(ClaimKey.USER_ID_KEY.getKey()));
+        refreshTokenRepository.deleteAllByUserId(userId);
+    }
+
+    @NonNull
     public AuthModel issueToken(@NonNull User user) {
         UserPrincipals userPrincipals = buildPrincipals(user);
 
@@ -59,6 +87,7 @@ public class TokenService {
                 .build();
     }
 
+    @NonNull
     private UserPrincipals buildPrincipals(@NonNull User user) {
         Set<UserRole> roles = user.getRoles().stream()
                 .map(Role::getCode)
@@ -71,6 +100,7 @@ public class TokenService {
                 .build();
     }
 
+    @NonNull
     private String generateAccessToken(
             @NonNull UserPrincipals principals,
             @NonNull String jti,
@@ -85,10 +115,11 @@ public class TokenService {
                 .claim(ClaimKey.USER_ID_KEY.getKey(), principals.getId())
                 .claim(ClaimKey.ROLES_KEY.getKey(), principals.getRoles())
                 .claim(ClaimKey.EMAIL_KEY.getKey(), principals.getEmail())
-                .signWith(privateKey)
+                .signWith(jwtVerifier.getPrivateKey())
                 .compact();
     }
 
+    @NonNull
     private String generateRefreshToken(
             @NonNull UserPrincipals principals,
             @NonNull String jti,
@@ -101,7 +132,7 @@ public class TokenService {
                 .setIssuedAt(Date.from(issueAt.toInstant()))
                 .setExpiration(Date.from(expiredAt.toInstant()))
                 .claim(ClaimKey.USER_ID_KEY.getKey(), principals.getId())
-                .signWith(privateKey)
+                .signWith(jwtVerifier.getPrivateKey())
                 .compact();
     }
 
