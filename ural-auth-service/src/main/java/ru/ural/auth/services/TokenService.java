@@ -61,6 +61,7 @@ public class TokenService {
     }
 
     @NonNull
+    @Transactional
     public AuthModel issueToken(@NonNull User user) {
         UserPrincipals userPrincipals = buildPrincipals(user);
 
