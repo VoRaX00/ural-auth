@@ -16,7 +16,7 @@ public class LoggingAuthenticationEntryPoint implements AuthenticationEntryPoint
             HttpServletResponse response,
             AuthenticationException authException
     ) throws IOException {
-        log.error("401 unauthorized: {} path: {}", authException.getMessage(), request.getRequestURI(), authException);
+        log.error("401 unauthorized: {} path: {}", authException.getMessage(), request.getRequestURL(), authException);
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
     }
 }
