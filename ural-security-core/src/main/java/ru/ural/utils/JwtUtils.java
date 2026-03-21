@@ -4,6 +4,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import ru.ural.enums.ClaimKey;
@@ -20,11 +21,16 @@ public class JwtUtils {
     private JwtUtils(){
     }
 
+    public static Authentication getAuthentication() {
+        return SecurityContextHolder.getContext()
+                .getAuthentication();
+    }
+
     @NonNull
     public static UserPrincipals getUser(@Nullable Authentication authentication) {
         Jwt jwt = getToken(authentication);
         return UserPrincipals.builder()
-                .id(getClaim(jwt, ClaimKey.USER_ID_KEY.getKey(), Long.class))
+                .uuid(getClaim(jwt, ClaimKey.USER_UUID_KEY.getKey(), String.class))
                 .roles(getRoles(authentication))
                 .email(getClaim(jwt, ClaimKey.EMAIL_KEY.getKey(), String.class))
                 .build();

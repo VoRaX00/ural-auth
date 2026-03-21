@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ClaimKey {
 
-    USER_ID_KEY("user_id"),
+    USER_UUID_KEY("user_uuid"),
     ROLES_KEY("roles"),
     EMAIL_KEY("email");
 

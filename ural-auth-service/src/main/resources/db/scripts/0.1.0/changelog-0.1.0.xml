@@ -14,7 +14,7 @@
 
     <changeSet id="create table users" author="kerzhakov">
         <createTable tableName="users">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="uuid" type="UUID">
                 <constraints primaryKey="true"/>
             </column>
             <column name="login" type="VARCHAR(255)">
@@ -39,7 +39,7 @@
 
     <changeSet id="create-table-users_roles" author="kerzhakov">
         <createTable tableName="users_roles">
-            <column name="user_id" type="BIGINT">
+            <column name="user_uuid" type="UUID">
                 <constraints nullable="false"/>
             </column>
             <column name="role_id" type="BIGINT">
@@ -48,10 +48,10 @@
         </createTable>
 
         <addForeignKeyConstraint baseTableName="users_roles"
-                                 baseColumnNames="user_id"
-                                 constraintName="users_roles_user_id_fk"
+                                 baseColumnNames="user_uuid"
+                                 constraintName="users_roles_user_uuid_fk"
                                  referencedTableName="users"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="uuid"
                                  deleteCascade="true"/>
         <addForeignKeyConstraint baseTableName="users_roles"
                                  baseColumnNames="role_id"
@@ -60,7 +60,7 @@
                                  referencedColumnNames="id"
                                  deleteCascade="true"/>
         <addPrimaryKey tableName="users_roles"
-                       columnNames="user_id, role_id"
+                       columnNames="user_uuid, role_id"
                        constraintName="stop_factors_stop_factor_groups_pk"/>
     </changeSet>
 
@@ -75,16 +75,16 @@
             <column name="salt" type="TEXT">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="BIGINT">
+            <column name="user_uuid" type="UUID">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="credentials"
-                                 baseColumnNames="user_id"
-                                 constraintName="credentials_user_id_fk"
+                                 baseColumnNames="user_uuid"
+                                 constraintName="credentials_user_uuid_fk"
                                  referencedTableName="users"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="uuid"/>
     </changeSet>
 
     <changeSet id="create-table-refresh-tokens" author="kerzhakov">
@@ -107,15 +107,15 @@
             <column name="expired_at" type="TIMESTAMPTZ">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="BIGINT">
+            <column name="user_uuid" type="UUID">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="refresh_tokens" baseColumnNames="user_id"
-                                 constraintName="refresh_tokens_user_id_fk"
+        <addForeignKeyConstraint baseTableName="refresh_tokens" baseColumnNames="user_uuid"
+                                 constraintName="refresh_tokens_user_uuid_fk"
                                  referencedTableName="users"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="uuid"/>
     </changeSet>
 
     <changeSet id="add-column-for-users" author="kerzhakov">

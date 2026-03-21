@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: ural-aggregator
+    name: ural-auth
     version: @project.version@
   datasource:
     url: jdbc:postgresql://localhost:10900/ural
@@ -35,9 +35,6 @@ security:
   jwt:
     public-key: ${PUBLIC_KEY}
     private-key: ${PRIVATE_KEY}
-
-users:
-  url: http://localhost:10904
 
 logging:
   level:

@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserPrincipals {
 
-    private Long id;
+    private String uuid;
 
     private String email;
 

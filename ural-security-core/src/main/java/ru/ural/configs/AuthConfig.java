@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import ru.ural.converters.AuthConverter;
 import ru.ural.converters.JwtConverter;
@@ -21,6 +22,7 @@ import ru.ural.filters.ExceptionFilterHandler;
 import ru.ural.decoders.NoVerifyJwtDecoder;
 import ru.ural.properties.JwtProperty;
 import ru.ural.services.JwtVerifier;
+import ru.ural.services.LoggingAuthenticationEntryPoint;
 import ru.ural.services.RoleSecurityService;
 
 import java.security.KeyFactory;
@@ -45,6 +47,7 @@ public class AuthConfig {
                 "/api/auth/login",
                 "/api/auth/refresh",
                 "/api/auth/registration",
+                "/api/users/registration",
         };
 
         return () -> allowedUrls;
@@ -103,6 +106,11 @@ public class AuthConfig {
         X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
         RSAPublicKey publicKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(spec);
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new LoggingAuthenticationEntryPoint();
     }
 
 }
