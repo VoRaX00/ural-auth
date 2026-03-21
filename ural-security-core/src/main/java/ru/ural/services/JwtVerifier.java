@@ -24,7 +24,7 @@ public class JwtVerifier {
         return Jwts.parserBuilder()
                 .setSigningKey(publicKey)
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 

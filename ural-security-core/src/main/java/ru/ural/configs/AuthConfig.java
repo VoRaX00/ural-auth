@@ -45,9 +45,13 @@ public class AuthConfig {
                 "/v3/**",
                 "/actuator/**",
                 "/api/auth/login",
-                "/api/auth/refresh",
+                "/api/auth/refresh-tokens",
                 "/api/auth/registration",
                 "/api/users/registration",
+                "/auth/login",
+                "/auth/refresh-tokens",
+                "/auth/registration",
+                "/users/registration",
         };
 
         return () -> allowedUrls;

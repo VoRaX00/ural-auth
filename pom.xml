@@ -12,7 +12,7 @@
 
     <groupId>ural</groupId>
     <artifactId>ural-auth</artifactId>
-    <version>1.8-SNAPSHOT</version>
+    <version>1.9-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <modules>
